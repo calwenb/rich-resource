@@ -1,0 +1,30 @@
+server:
+  port: 3964
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    # 配置数据源
+    url: jdbc:mysql://101.43.95.238:3306/rich_resource?serverTimezone=Hongkong&useAffectedRows=true
+    username: root
+    password: WHL531124
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 配置druid数据源
+    druid:
+      max-wait: 60000
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+releasedao:
+  config:
+    logger: false
