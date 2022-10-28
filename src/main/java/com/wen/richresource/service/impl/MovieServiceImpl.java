@@ -5,12 +5,14 @@ import com.wen.releasedao.core.wrapper.QueryWrapper;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.request.MovieQueryRequest;
 import com.wen.richresource.service.MovieService;
+import com.wen.richresource.vo.PageVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestScope;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author calwen
@@ -28,29 +30,53 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieEntity> list(MovieQueryRequest request) {
+        QueryWrapper wrapper = this.multiCondition(request);
+        return baseMapper.getList(MovieEntity.class, wrapper);
+    }
 
-        String type = request.getType();
-        String score = request.getScore();
-        String region = request.getRegion();
-        String language = request.getLanguage();
+    @Override
+    public PageVO<MovieEntity> page(MovieQueryRequest request) {
+        QueryWrapper wrapper = this.multiCondition(request);
+        baseMapper.getList(MovieEntity.class, wrapper);
+        //todo 支持原生分页
+        return null;
+    }
+
+
+    private QueryWrapper multiCondition(MovieQueryRequest request) {
+        String keyword = request.getKeyword();
         String releaseYear = request.getReleaseYear();
-        QueryWrapper wrapper = new QueryWrapper();
+        String score = request.getScore();
+        Boolean simple = request.isSimple();
+        List<String> regionList = request.getRegionList();
+        List<String> typeList = request.getTypeList();
+        List<String> languageList = request.getLanguageList();
 
-        if (StringUtils.isNotBlank(type)) {
-            wrapper.eq("type", type);
+
+        QueryWrapper wrapper = new QueryWrapper();
+        if (StringUtils.isNotBlank(keyword)) {
+            wrapper.like("name,other_name",keyword);
         }
         if (StringUtils.isNotBlank(score)) {
             wrapper.eq("score", score);
         }
-        if (StringUtils.isNotBlank(region)) {
-            wrapper.eq("region", region);
-        }
-        if (StringUtils.isNotBlank(language)) {
-            wrapper.eq("language", language);
-        }
         if (StringUtils.isNotBlank(releaseYear)) {
             wrapper.eq("release_year", releaseYear);
         }
-        return baseMapper.getList(MovieEntity.class, wrapper);
+        if (Objects.equals(simple, true)) {
+            wrapper.select("id,title,release_time");
+        }
+        if (regionList != null && !regionList.isEmpty()) {
+//            wrapper.eq("type", type);
+        }
+        if (typeList != null && !typeList.isEmpty()) {
+//            wrapper.eq("region", region);
+        }
+        if (languageList != null && !languageList.isEmpty()) {
+//            wrapper.eq("language", language);
+        }
+
+        wrapper.orderDesc("release_time");
+        return wrapper;
     }
 }

@@ -1,6 +1,7 @@
 package com.wen.richresource.service;
 
 import com.wen.richresource.entity.ResourceEntity;
+import com.wen.richresource.request.ResourceQueryRequest;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ResourceService {
 
 
     void crawlMovieResource();
+
+    List<ResourceEntity> list(ResourceQueryRequest request);
 }

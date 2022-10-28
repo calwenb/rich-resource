@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.wen.releasedao.core.mapper.BaseMapper;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.entity.ResourceEntity;
+import com.wen.richresource.enums.ResourceTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -34,21 +35,18 @@ public class MovieDBPipeline implements Pipeline {
         title = title.substring(0, title.indexOf("》") + 1);
 
         if (!StringUtils.isAnyBlank(content, resourceLink)) {
-            MovieEntity movieEntity = parseMovieEntity(content);
-            movieEntity.setTitle(title);
+            MovieEntity movieEntity = parseMovieEntity(content, title);
             movieEntity.setDeleted(false);
             movieEntity.setCreateTime(new Date());
-            movieEntity.setUpdateTime(new Date());
             baseMapper.save(movieEntity);
 
             ResourceEntity resourceEntity = new ResourceEntity();
-            resourceEntity.setType("电影");//
+            resourceEntity.setType(ResourceTypeEnum.MOVIE.getType());
             resourceEntity.setResourceLink(resourceLink);
             resourceEntity.setTargetId(movieEntity.getId());
             resourceEntity.setValid(true);
             resourceEntity.setDeleted(false);
             resourceEntity.setCreateTime(new Date());
-            resourceEntity.setUpdateTime(new Date());
             baseMapper.save(resourceEntity);
         }
 
@@ -57,7 +55,7 @@ public class MovieDBPipeline implements Pipeline {
     /**
      * 解析电影实体
      */
-    private MovieEntity parseMovieEntity(String content) {
+    private MovieEntity parseMovieEntity(String content, String title) {
         MovieEntity movie = new MovieEntity();
         String[] arr = content.split("◎");
         for (String s : arr) {
@@ -70,9 +68,6 @@ public class MovieDBPipeline implements Pipeline {
             switch (key) {
                 case "译　　名":
                     movie.setOtherName(value);
-                    break;
-                case "片　　名":
-                    movie.setName(value);
                     break;
                 case "年　　代":
                     movie.setReleaseYear(value);
@@ -117,9 +112,8 @@ public class MovieDBPipeline implements Pipeline {
                     break;
             }
         }
-        if (StringUtils.isBlank(movie.getName())) {
-            movie.setName(movie.getOtherName());
-        }
+        movie.setTitle(title);
+        movie.setName(title.substring(title.indexOf("《") + 1, title.indexOf("》")));
         return movie;
     }
 }

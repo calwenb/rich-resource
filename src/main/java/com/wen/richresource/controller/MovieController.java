@@ -4,6 +4,7 @@ import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.request.MovieQueryRequest;
 import com.wen.richresource.service.MovieService;
 import com.wen.richresource.util.ResultUtil;
+import com.wen.richresource.vo.PageVO;
 import com.wen.richresource.vo.ResultVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,12 @@ public class MovieController {
     @GetMapping("/list")
     public ResultVO<List<MovieEntity>> list(MovieQueryRequest request) {
         List<MovieEntity> data = movieService.list(request);
+        return ResultUtil.success(data);
+    }
+
+    @GetMapping("/page")
+    public ResultVO<PageVO<MovieEntity>> page(MovieQueryRequest request) {
+        PageVO<MovieEntity> data = movieService.page(request);
         return ResultUtil.success(data);
     }
 

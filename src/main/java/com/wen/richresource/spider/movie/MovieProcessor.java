@@ -20,7 +20,7 @@ public class MovieProcessor implements PageProcessor {
     //统计
     public static int count = 0;
     //限制
-    private static volatile int limit = 50;
+    private static volatile int limit = 500;
 
     @Override
     public void process(Page page) {

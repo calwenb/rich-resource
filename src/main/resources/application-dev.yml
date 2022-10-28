@@ -25,6 +25,6 @@ spring:
       use-global-data-source-stat: true
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
-releasedao:
-  config:
-    logger: false
+#releasedao:
+#  config:
+#    logger: true

@@ -1,9 +1,8 @@
 package com.wen.richresource.request;
 
-import com.wen.richresource.entity.MovieEntity;
 import lombok.Data;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * @author calwen
@@ -11,9 +10,14 @@ import java.util.Date;
  */
 @Data
 public class MovieQueryRequest {
-    private String region;
-    private String type;
-    private String language;
+    private String keyword;
+    private List<String> regionList;
+    private List<String> typeList;
+    private List<String> languageList;
     private String releaseYear;
     private String score;
+    /**
+     * 简单查询
+     */
+    private boolean simple;
 }
