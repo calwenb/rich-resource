@@ -2,9 +2,11 @@ package com.wen.richresource.spider.movie;
 
 import cn.hutool.core.date.DateUtil;
 import com.wen.releasedao.core.mapper.BaseMapper;
+import com.wen.releasedao.core.wrapper.QueryWrapper;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.entity.ResourceEntity;
 import com.wen.richresource.enums.ResourceTypeEnum;
+import com.wen.richresource.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,6 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -25,29 +26,46 @@ import java.util.Optional;
 public class MovieDBPipeline implements Pipeline {
     @Resource
     BaseMapper baseMapper;
+    String baseDir = "D:\\project-support\\rich-resource";
 
     @Override
     public void process(ResultItems resultItems, Task task) {
         String content = resultItems.get("content");
         String resourceLink = resultItems.get("resourceLink");
+        String resourceName = resultItems.get("resourceName");
+        String imageUrl = resultItems.get("imageUrl");
         String title = (String) Optional.ofNullable(resultItems.get("title"))
                 .orElse("未知");
         title = title.substring(0, title.indexOf("》") + 1);
 
         if (!StringUtils.isAnyBlank(content, resourceLink)) {
             MovieEntity movieEntity = parseMovieEntity(content, title);
+            QueryWrapper wrapper = new QueryWrapper()
+                    .eq("name", movieEntity.getName());
+            MovieEntity model = baseMapper.get(MovieEntity.class, wrapper);
+            if (model != null) {
+                return;
+            }
+            String path = "\\image\\" + System.currentTimeMillis() + "-"
+                    + movieEntity.getName() + ".jpg";
+            FileUtil.saveFile(imageUrl, baseDir + path);
+            String thumbnailPath = "\\image\\" + System.currentTimeMillis() + "-"
+                    + movieEntity.getName() + ".jpg";
+            FileUtil.thumbnail(baseDir + path, baseDir + thumbnailPath);
+            movieEntity.setImageUrl(path);
+            movieEntity.setThumbnailUrl(thumbnailPath);
             movieEntity.setDeleted(false);
-            movieEntity.setCreateTime(new Date());
-            baseMapper.save(movieEntity);
+            baseMapper.add(movieEntity);
 
+            System.out.println(" ==> add");
             ResourceEntity resourceEntity = new ResourceEntity();
             resourceEntity.setType(ResourceTypeEnum.MOVIE.getType());
+            resourceEntity.setName(resourceName);
             resourceEntity.setResourceLink(resourceLink);
             resourceEntity.setTargetId(movieEntity.getId());
             resourceEntity.setValid(true);
             resourceEntity.setDeleted(false);
-            resourceEntity.setCreateTime(new Date());
-            baseMapper.save(resourceEntity);
+            baseMapper.add(resourceEntity);
         }
 
     }
@@ -100,11 +118,18 @@ public class MovieDBPipeline implements Pipeline {
                     break;
                 case "演　　员":
                 case "主　　演":
-                    String[] actorArr = value.split(" ");
+                    String[] actorArr = value.split("　　");
                     StringBuilder actorStr = new StringBuilder();
-                    for (int i = 0; i < actorArr.length && i < 3; i++) {
-                        actorStr.append(actorArr[i]).append("/r/n");
+                    int len = 0;
+                    for (int i = 0; i < actorArr.length && len < 3; i++) {
+                        String str = actorArr[i];
+                        if (StringUtils.isBlank(str)) {
+                            continue;
+                        }
+                        actorStr.append(str.replace((char) 12288, ' ').trim()).append("、");
+                        len++;
                     }
+                    actorStr.deleteCharAt(actorStr.length() - 1);
                     movie.setActor(String.valueOf(actorStr));
                     break;
                 case "简　　介":
@@ -113,7 +138,13 @@ public class MovieDBPipeline implements Pipeline {
             }
         }
         movie.setTitle(title);
-        movie.setName(title.substring(title.indexOf("《") + 1, title.indexOf("》")));
+        String name = title.substring(title.indexOf("《") + 1, title.indexOf("》"));
+        if (StringUtils.isBlank(name)) {
+            movie.setName("未知");
+        }
+        name = name.replace("\\", "-");
+        name = name.replace("/", "-");
+        movie.setName(name);
         return movie;
     }
 }

@@ -44,6 +44,7 @@ public class MovieVO {
      * 简介
      */
     private String intro;
+    private String data;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;

@@ -14,6 +14,6 @@ public class MovieSpiderTest {
     @Test
     void run() {
         resourceService.crawlMovieResource();
-
     }
+
 }

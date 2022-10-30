@@ -1,9 +1,11 @@
 package com.wen.richresource.controller;
 
+import com.wen.richresource.convert.MovieConvert;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.request.MovieQueryRequest;
 import com.wen.richresource.service.MovieService;
 import com.wen.richresource.util.ResultUtil;
+import com.wen.richresource.vo.MovieVO;
 import com.wen.richresource.vo.PageVO;
 import com.wen.richresource.vo.ResultVO;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author calwen
@@ -23,22 +26,30 @@ import java.util.List;
 public class MovieController {
     @Resource
     MovieService movieService;
+    @Resource
+    MovieConvert convert;
 
-    @GetMapping("/{id}")
-    public ResultVO<MovieEntity> get(@PathVariable Integer id) {
-        MovieEntity data = movieService.get(id);
+    @GetMapping("/{id}/{dataType}")
+    public ResultVO<MovieVO> get(@PathVariable Integer id, @PathVariable String dataType) {
+        MovieVO data = convert.convert(movieService.get(id), dataType);
         return ResultUtil.success(data);
     }
 
     @GetMapping("/list")
-    public ResultVO<List<MovieEntity>> list(MovieQueryRequest request) {
-        List<MovieEntity> data = movieService.list(request);
+    public ResultVO<List<MovieVO>> list(MovieQueryRequest request) {
+        List<MovieVO> data = convert.list(movieService.list(request), request.getDataType());
         return ResultUtil.success(data);
     }
 
     @GetMapping("/page")
     public ResultVO<PageVO<MovieEntity>> page(MovieQueryRequest request) {
         PageVO<MovieEntity> data = movieService.page(request);
+        return ResultUtil.success(data);
+    }
+
+    @GetMapping("/type")
+    public ResultVO<Map<String, Object[]>> type() {
+        Map<String, Object[]> data = movieService.type();
         return ResultUtil.success(data);
     }
 

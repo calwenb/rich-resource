@@ -16,6 +16,7 @@ public class MovieQueryRequest {
     private List<String> languageList;
     private String releaseYear;
     private String score;
+    private String dataType;
     /**
      * 简单查询
      */

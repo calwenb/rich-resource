@@ -48,6 +48,8 @@ public class MovieEntity {
      * 简介
      */
     private String intro;
+    private String imageUrl;
+    private String thumbnailUrl;
     private Boolean deleted;
     @CreateTime
     private Date createTime;

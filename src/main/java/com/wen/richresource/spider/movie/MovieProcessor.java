@@ -33,6 +33,8 @@ public class MovieProcessor implements PageProcessor {
             page.putField("content", page.getHtml().xpath("//*[@id=\"Zoom\"]/span/text()").toString());
             page.putField("title", String.valueOf(page.getHtml().xpath("//*[@id=\"header\"]/div/div[3]/div[3]/div[1]/div[2]/div[1]/h1/font/text()")));
             page.putField("resourceLink", String.valueOf(page.getHtml().xpath("//*[@id=\"Zoom\"]/span/a/@href")));
+            page.putField("resourceName", String.valueOf(page.getHtml().xpath("//*[@id=\"Zoom\"]/span/a/strong/font/font/font/text()")));
+            page.putField("imageUrl", String.valueOf(page.getHtml().xpath("//*[@id=\"Zoom\"]/span/img/@src")));
             count++;
             limit--;
         } else {
