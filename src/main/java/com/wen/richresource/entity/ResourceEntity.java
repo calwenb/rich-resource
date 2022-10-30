@@ -22,6 +22,7 @@ public class ResourceEntity {
     @IdField
     private Integer id;
     private Integer targetId;
+    private String name;
     private String type;
     private Boolean valid;
     private String resourceLink;

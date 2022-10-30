@@ -4,14 +4,14 @@ server:
     context-path: /api
 
 spring:
+
   datasource:
-    # 配置数据源
     url: jdbc:mysql://101.43.95.238:3306/rich_resource?serverTimezone=Hongkong&useAffectedRows=true
     username: root
     password: WHL531124
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    # 配置druid数据源
+
     druid:
       max-wait: 60000
       initial-size: 5
@@ -25,6 +25,19 @@ spring:
       use-global-data-source-stat: true
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
-#releasedao:
-#  config:
-#    logger: true
+  redis:
+    host: 101.43.95.238
+    port: 6379
+    database: 2
+    password: WHL531124
+    timeout: 1800000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+
+releasedao:
+  config:
+    logger: true

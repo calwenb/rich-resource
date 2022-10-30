@@ -19,31 +19,33 @@ import javax.annotation.Resource;
 @RequestMapping("/auths")
 public class AuthController {
     @Resource
-    AuthService service;
+    AuthService authService;
 
     @PassAuth
     @PostMapping("/login")
-    public ResultVO<String> login(@Validated(UserRequest.login.class) @RequestBody UserRequest request) {
-        String token = service.login(request);
+    public ResultVO<String> login(@Validated(UserRequest.login.class)
+                                  @RequestBody UserRequest request) {
+        String token = authService.login(request);
         return ResultUtil.success(token);
     }
 
     @PassAuth
     @PostMapping("/register")
-    public ResultVO<String> register(@Validated(UserRequest.register.class) @RequestBody UserRequest request) {
-        String token = service.register(request);
+    public ResultVO<String> register(@Validated(UserRequest.register.class)
+                                     @RequestBody UserRequest request) {
+        String token = authService.register(request);
         return ResultUtil.success(token);
     }
 
     @PostMapping("/out-login")
     public ResultVO<String> outLogin() {
-        boolean b = service.removeToken();
+        boolean b = authService.removeToken();
         return ResultUtil.autoDo(b);
     }
 
     @GetMapping("/user/info")
     public ResultVO<UserEntity> getUserByToken() {
-        UserEntity user = service.getTokenUser();
+        UserEntity user = authService.getUser();
         return ResultUtil.success(user);
     }
 }

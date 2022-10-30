@@ -16,11 +16,8 @@ public class MovieSpider {
     MovieProcessor movieProcessor;
     @Resource
     MovieDBPipeline movieDBPipeline;
-    @Resource
-    BaseMapper baseMapper;
+
     public void run() {
-//        baseMapper.exeSQL("TRUNCATE TABLE  movie",new Object[]{});
-//        baseMapper.exeSQL("TRUNCATE TABLE  resource",new Object[]{});
         Spider.create(movieProcessor)
                 .addUrl("https://www.ygdy8.net/html/gndy/dyzz/index.html")
                 .addPipeline(movieDBPipeline)

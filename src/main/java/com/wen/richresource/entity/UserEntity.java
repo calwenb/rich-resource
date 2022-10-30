@@ -21,14 +21,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("user")
-public class UserEntity implements Serializable {
+public class UserEntity {
     @IdField(idType = IdTypeEnum.AUTO)
     private Integer id;
-    private String userName;
-    private String loginName;
+    private String name;
+    private String account;
     private String password;
-    private Integer userType;
-    private String phoneNumber;
+    private String type;
+    private String phone;
     private String email;
     private Boolean deleted;
     @CreateTime

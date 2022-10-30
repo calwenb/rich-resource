@@ -14,7 +14,7 @@ import lombok.Getter;
 public enum ResultEnum {
     SUCCESS(2000, "操作成功"),
     ERROR(7000, "操作失败"),
-    UNAUTHORIZED(4010, "身份验证失败，请重新登录"),
+    UNAUTHORIZED(4001, "身份验证失败，请重新登录"),
     BAD_REQUEST(4000, "错误请求，请检查api调用"),
     EXCEPTION(5000, "很抱歉,服务器发生异常：");
 
