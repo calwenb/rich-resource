@@ -40,4 +40,4 @@ spring:
 
 releasedao:
   config:
-    logger: false
+    logger: true

@@ -15,7 +15,6 @@ public class MovieQueryRequest {
     private List<String> regionList;
     private List<String> typeList;
     private List<String> languageList;
-    private String year;
     private String releaseYear;
     private String score;
     private String dataType;

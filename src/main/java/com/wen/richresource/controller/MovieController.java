@@ -41,6 +41,12 @@ public class MovieController {
         return ResultUtil.success(data);
     }
 
+    @GetMapping("/recommend/{id}")
+    public ResultVO<List<MovieVO>> recommend(@PathVariable Integer id) {
+        List<MovieVO> data = convert.list(movieService.recommend(id), "t");
+        return ResultUtil.success(data);
+    }
+
     @GetMapping("/page")
     public ResultVO<PageVO<MovieVO>> page(MovieQueryRequest request) {
         PageVO<MovieEntity> page = movieService.page(request);
@@ -55,3 +61,4 @@ public class MovieController {
     }
 
 }
+

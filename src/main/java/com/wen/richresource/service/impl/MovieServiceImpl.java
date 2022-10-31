@@ -14,10 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author calwen
@@ -56,6 +53,28 @@ public class MovieServiceImpl implements MovieService {
         map.put("language", languageList);
         map.put("region", region);
         return map;
+    }
+
+    @Override
+    public List<MovieEntity> recommend(Integer id) {
+        MovieEntity movie = baseMapper.getById(MovieEntity.class, id);
+        String type = movie.getType();
+        if (StringUtils.isNotBlank(type)) {
+            if (type.contains(" / ")) {
+                type = type.split(" / ")[0];
+            }
+            QueryWrapper wrapper = new QueryWrapper()
+                    .like("type", type)
+                    .notEq("id", movie.getId())
+                    .orderDesc("release_time")
+                    .limit(10);
+            return baseMapper.getList(MovieEntity.class, wrapper);
+        }
+        QueryWrapper wrapper = new QueryWrapper()
+                .notEq("id", movie.getId())
+                .orderDesc("release_time")
+                .limit(10);
+        return baseMapper.getList(MovieEntity.class, wrapper);
     }
 
 

@@ -21,4 +21,6 @@ public interface MovieService {
 
     Map<String, Object[]> type();
 
+    List<MovieEntity> recommend(Integer id);
+
 }
