@@ -1,6 +1,8 @@
 package com.wen.richresource.service.impl;
 
 import com.wen.releasedao.core.mapper.BaseMapper;
+import com.wen.releasedao.core.vo.PageRequest;
+import com.wen.releasedao.core.vo.PageVO;
 import com.wen.releasedao.core.wrapper.QueryWrapper;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.enums.movie.MovieLanguageTypeEnum;
@@ -8,12 +10,14 @@ import com.wen.richresource.enums.movie.MovieRegionTypeEnum;
 import com.wen.richresource.enums.movie.MovieTypeEnum;
 import com.wen.richresource.request.MovieQueryRequest;
 import com.wen.richresource.service.MovieService;
-import com.wen.richresource.vo.PageVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author calwen
@@ -37,10 +41,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public PageVO<MovieEntity> page(MovieQueryRequest request) {
+        PageRequest pageRequest = new PageRequest(request.getPageNum(), request.getPageSize());
         QueryWrapper wrapper = this.multiCondition(request);
-        baseMapper.getList(MovieEntity.class, wrapper);
-        //todo 支持原生分页
-        return null;
+        return baseMapper.page(MovieEntity.class, wrapper, pageRequest);
     }
 
     @Override
@@ -73,28 +76,27 @@ public class MovieServiceImpl implements MovieService {
         if (StringUtils.isNotBlank(score)) {
             wrapper.eq("score", score);
         }
-        if (StringUtils.isNotBlank(releaseYear)) {
+        if (StringUtils.isNotBlank(releaseYear) && !Objects.equals(releaseYear, "全部")) {
             wrapper.eq("release_year", releaseYear);
         }
         if (Objects.equals(simple, true)) {
             wrapper.select("id,title,release_time");
         }
         if (regionList != null && !regionList.isEmpty()) {
-            regionList.remove("全部");
+//            regionList.remove("全部");
             for (String region : regionList) {
                 wrapper.like("region", region);
             }
         }
-
         if (typeList != null && !typeList.isEmpty()) {
-            typeList.remove("全部");
+//            typeList.remove("全部");
             for (String type : typeList) {
                 wrapper.like("type", type);
             }
         }
 
         if (languageList != null && !languageList.isEmpty()) {
-            languageList.remove("全部");
+//            languageList.remove("全部");
             for (String language : languageList) {
                 if (MovieLanguageTypeEnum.国语.name().equals(language)) {
                     wrapper.like("language", language)

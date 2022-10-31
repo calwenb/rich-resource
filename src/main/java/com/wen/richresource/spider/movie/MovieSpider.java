@@ -1,6 +1,5 @@
 package com.wen.richresource.spider.movie;
 
-import com.wen.releasedao.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 

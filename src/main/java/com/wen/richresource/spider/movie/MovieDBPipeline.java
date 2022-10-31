@@ -15,7 +15,9 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author calwen
@@ -48,10 +50,14 @@ public class MovieDBPipeline implements Pipeline {
             }
             String path = "\\image\\" + System.currentTimeMillis() + "-"
                     + movieEntity.getName() + ".jpg";
-            FileUtil.saveFile(imageUrl, baseDir + path);
-            String thumbnailPath = "\\image\\" + System.currentTimeMillis() + "-"
+            String thumbnailPath = "\\image\\" + (System.currentTimeMillis() + 1) + "-"
                     + movieEntity.getName() + ".jpg";
-            FileUtil.thumbnail(baseDir + path, baseDir + thumbnailPath);
+            try {
+                FileUtil.saveFile(imageUrl, baseDir + path);
+                FileUtil.thumbnail(baseDir + path, baseDir + thumbnailPath);
+            } catch (Exception e) {
+                log.error("图片爬取失败");
+            }
             movieEntity.setImageUrl(path);
             movieEntity.setThumbnailUrl(thumbnailPath);
             movieEntity.setDeleted(false);
@@ -68,7 +74,15 @@ public class MovieDBPipeline implements Pipeline {
             baseMapper.add(resourceEntity);
         }
 
+
     }
+
+/*
+    private boolean equalMovie(MovieEntity model, MovieEntity movie) {
+
+        return false;
+    }
+*/
 
     /**
      * 解析电影实体
@@ -82,7 +96,6 @@ public class MovieDBPipeline implements Pipeline {
             }
             String key = s.substring(0, 4);
             String value = s.substring(5);
-//            System.out.println(key + "===:===" + value);
             switch (key) {
                 case "译　　名":
                     movie.setOtherName(value);
@@ -108,13 +121,26 @@ public class MovieDBPipeline implements Pipeline {
                     }
                     break;
                 case "豆瓣评分":
-                    movie.setScore(value);
+                    if (StringUtils.isNotBlank(value)) {
+                        int i = value.indexOf("/10 from");
+                        if (i > 0) {
+                            value = value.substring(0, i);
+                            movie.setScore(value);
+                            break;
+                        }
+                    }
+                    movie.setScore("0");
                     break;
                 case "片　　长":
-                    String minute = value.substring(0, value.indexOf("分钟"));
-                    if (StringUtils.isNotBlank(minute)) {
-                        movie.setTime(Integer.valueOf(minute));
+                    if (StringUtils.isNotBlank(value)) {
+                        int i = value.indexOf("分钟");
+                        if (i > 0) {
+                            value = value.substring(0, i);
+                            movie.setTime(Integer.valueOf(value));
+                            break;
+                        }
                     }
+                    movie.setTime(0);
                     break;
                 case "演　　员":
                 case "主　　演":

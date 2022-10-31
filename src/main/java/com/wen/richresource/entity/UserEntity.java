@@ -1,7 +1,7 @@
 package com.wen.richresource.entity;
 
 import com.wen.releasedao.core.annotation.CreateTime;
-import com.wen.releasedao.core.annotation.IdField;
+import com.wen.releasedao.core.annotation.FieldId;
 import com.wen.releasedao.core.annotation.TableName;
 import com.wen.releasedao.core.annotation.UpdateTime;
 import com.wen.releasedao.core.enums.IdTypeEnum;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -22,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @TableName("user")
 public class UserEntity {
-    @IdField(idType = IdTypeEnum.AUTO)
+    @FieldId(idType = IdTypeEnum.AUTO)
     private Integer id;
     private String name;
     private String account;

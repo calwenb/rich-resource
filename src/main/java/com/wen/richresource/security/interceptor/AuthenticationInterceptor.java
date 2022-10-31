@@ -6,7 +6,6 @@ import com.wen.richresource.service.AuthService;
 import com.wen.richresource.util.LoggerUtil;
 import com.wen.richresource.util.ResultUtil;
 import com.wen.richresource.vo.ResultVO;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 

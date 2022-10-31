@@ -1,7 +1,7 @@
 package com.wen.richresource.entity;
 
 import com.wen.releasedao.core.annotation.CreateTime;
-import com.wen.releasedao.core.annotation.IdField;
+import com.wen.releasedao.core.annotation.FieldId;
 import com.wen.releasedao.core.annotation.TableName;
 import com.wen.releasedao.core.annotation.UpdateTime;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @TableName("movie")
 public class MovieEntity {
-    @IdField
+    @FieldId
     private Integer id;
     private String title;
     private String name;

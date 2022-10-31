@@ -1,8 +1,5 @@
 package com.wen.richresource.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * @author calwen
  * @since 2022/10/29

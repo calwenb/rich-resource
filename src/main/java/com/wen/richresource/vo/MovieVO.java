@@ -1,10 +1,6 @@
 package com.wen.richresource.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wen.releasedao.core.annotation.CreateTime;
-import com.wen.releasedao.core.annotation.IdField;
-import com.wen.releasedao.core.annotation.UpdateTime;
-import com.wen.richresource.entity.MovieEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -33,7 +29,7 @@ public class MovieVO {
     /**
      * 发行时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date releaseTime;
     /**
      * 演员

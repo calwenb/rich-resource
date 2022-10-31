@@ -1,12 +1,12 @@
 package com.wen.richresource.controller;
 
+import com.wen.releasedao.core.vo.PageVO;
 import com.wen.richresource.convert.MovieConvert;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.request.MovieQueryRequest;
 import com.wen.richresource.service.MovieService;
 import com.wen.richresource.util.ResultUtil;
 import com.wen.richresource.vo.MovieVO;
-import com.wen.richresource.vo.PageVO;
 import com.wen.richresource.vo.ResultVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,8 +42,9 @@ public class MovieController {
     }
 
     @GetMapping("/page")
-    public ResultVO<PageVO<MovieEntity>> page(MovieQueryRequest request) {
-        PageVO<MovieEntity> data = movieService.page(request);
+    public ResultVO<PageVO<MovieVO>> page(MovieQueryRequest request) {
+        PageVO<MovieEntity> page = movieService.page(request);
+        PageVO<MovieVO> data = convert.page(page, request.getDataType());
         return ResultUtil.success(data);
     }
 

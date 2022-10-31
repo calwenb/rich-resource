@@ -1,8 +1,8 @@
 package com.wen.richresource.service;
 
+import com.wen.releasedao.core.vo.PageVO;
 import com.wen.richresource.entity.MovieEntity;
 import com.wen.richresource.request.MovieQueryRequest;
-import com.wen.richresource.vo.PageVO;
 
 import java.util.List;
 import java.util.Map;
