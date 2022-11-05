@@ -45,7 +45,7 @@
             <artifactId>hutool-core</artifactId>
             <version>5.8.9</version>
         </dependency>
-        <!-- release-dao -->
+        <!--calwen 依赖-->
         <dependency>
             <groupId>io.github.calwenb</groupId>
             <artifactId>releasedao-spring-boot-starter</artifactId>

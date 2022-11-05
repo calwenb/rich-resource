@@ -26,7 +26,12 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public void crawlMovieResource() {
-        movieSpider.run();
+        new Thread(() -> {
+            System.out.println("同步数据中");
+            movieSpider.run();
+        }).start();
+
+
     }
 
     @Override

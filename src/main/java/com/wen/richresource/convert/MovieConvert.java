@@ -7,6 +7,7 @@ import com.wen.richresource.vo.MovieVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,7 +22,8 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class MovieConvert {
-    String baseDir = "D:\\project-support\\rich-resource";
+    @Value("${rich-resource.baseDir}")
+    String baseDir;
 
     public MovieVO convert(MovieEntity entity, String dataType) {
         MovieVO vo = new MovieVO();
@@ -39,7 +41,8 @@ public class MovieConvert {
             try {
                 data = FileUtil.getImageBase64(baseDir + entity.getImageUrl());
             } catch (IOException e) {
-                log.error("ImageBase64 错误：\n" + e.getMessage());
+                log.error("ImageBase64 错误");
+                e.printStackTrace();
             }
             vo.setData(data);
             if (StringUtils.isBlank(entity.getScore())) {

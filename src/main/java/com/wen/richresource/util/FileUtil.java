@@ -38,7 +38,8 @@ public class FileUtil {
     public static void saveFile(String url, String path) {
         File f = new File(path);
         if (!f.exists()) {
-            f.getParentFile().mkdirs();
+            boolean mkdirs = f.getParentFile().mkdirs();
+            LoggerUtil.info("mkdir=" + mkdirs, FileUtil.class);
         }
         try {
             InputStream is = new URL(url).openStream();

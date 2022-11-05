@@ -4,11 +4,9 @@ import com.wen.richresource.entity.ResourceEntity;
 import com.wen.richresource.request.ResourceQueryRequest;
 import com.wen.richresource.service.ResourceService;
 import com.wen.richresource.util.ResultUtil;
+import com.wen.richresource.vo.MovieVO;
 import com.wen.richresource.vo.ResultVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,10 +26,17 @@ public class ResourceController {
         ResourceEntity data = resourceService.get(id);
         return ResultUtil.success(data);
     }
+
     @GetMapping("/list")
     public ResultVO<List<ResourceEntity>> list(ResourceQueryRequest request) {
         List<ResourceEntity> data = resourceService.list(request);
         return ResultUtil.success(data);
+    }
+
+    @PostMapping("/syn")
+    public ResultVO<String> syn() {
+        resourceService.crawlMovieResource();
+        return ResultUtil.successDo();
     }
 
 }

@@ -9,15 +9,14 @@ import com.wen.richresource.enums.ResourceTypeEnum;
 import com.wen.richresource.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
-import java.util.logging.SimpleFormatter;
 
 /**
  * @author calwen
@@ -28,7 +27,8 @@ import java.util.logging.SimpleFormatter;
 public class MovieDBPipeline implements Pipeline {
     @Resource
     BaseMapper baseMapper;
-    String baseDir = "D:\\project-support\\rich-resource";
+    @Value("${rich-resource.baseDir}")
+    String baseDir;
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -48,15 +48,16 @@ public class MovieDBPipeline implements Pipeline {
             if (model != null) {
                 return;
             }
-            String path = "\\image\\" + System.currentTimeMillis() + "-"
+            String path = "/image/" + System.currentTimeMillis() + "-"
                     + movieEntity.getName() + ".jpg";
-            String thumbnailPath = "\\image\\" + (System.currentTimeMillis() + 1) + "-"
+            String thumbnailPath = "/image/" + (System.currentTimeMillis() + 1) + "-"
                     + movieEntity.getName() + ".jpg";
             try {
                 FileUtil.saveFile(imageUrl, baseDir + path);
                 FileUtil.thumbnail(baseDir + path, baseDir + thumbnailPath);
             } catch (Exception e) {
-                log.error("图片爬取失败");
+                log.error("图片爬取失败 \n e={}", e.getMessage());
+                e.printStackTrace();
             }
             movieEntity.setImageUrl(path);
             movieEntity.setThumbnailUrl(thumbnailPath);

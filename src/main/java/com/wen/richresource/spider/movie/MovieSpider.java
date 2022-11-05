@@ -1,5 +1,6 @@
 package com.wen.richresource.spider.movie;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 

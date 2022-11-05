@@ -25,9 +25,9 @@ public class MovieProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         boolean steal = false;
-        if (limit < 0) {
+/*        if (limit < 0) {
             return;
-        }
+        }*/
         //爬取资源详情
         if (page.getUrl().regex(".*/html/gndy/dyzz/[0-9]{8}/[0-9]{5}.html").match()) {
             page.putField("content", page.getHtml().xpath("//*[@id=\"Zoom\"]/span/text()").toString());
